@@ -24,3 +24,70 @@ def mostrar_asientos_disponibles(destino_elegido):
             print(f"No hay asientos disponibles para {destino_elegido}.")
     else:
         print("Destino no válido.")
+        
+        # --- Parte 2: Funcionalidades principales ---
+
+def comprar_pasaje(destino, requiere_pasaporte=False):
+    """Permite al usuario comprar un pasaje para un destino."""
+    if destino not in DESTINOS:
+        print("Destino no válido.")
+        return
+
+    mostrar_asientos_disponibles(destino)
+    if not DESTINOS[destino]["asientos"]:
+        print("Lo sentimos, no hay asientos disponibles para este destino.")
+        return
+
+    rut = input("Ingrese su RUT: ").strip()
+    if rut in DESTINOS[destino]["pasajeros"]:
+        print("Ya tiene un pasaje registrado para este destino.")
+        return
+
+    nombre = input("Ingrese su nombre completo: ").strip()
+
+    pasaporte = None
+    if requiere_pasaporte:
+        tiene_pasaporte = input("¿Tiene pasaporte vigente? (s/n): ").lower().strip()
+        if tiene_pasaporte == 's':
+            pasaporte = input("Ingrese su número de pasaporte: ").strip()
+        else:
+            print("Para este destino se requiere pasaporte. No se puede comprar el pasaje sin él.")
+            return
+
+    try:
+        asiento = int(input("Ingrese el número de asiento que desea ocupar: "))
+    except ValueError:
+        print("Número de asiento inválido.")
+        return
+
+    if asiento not in DESTINOS[destino]["asientos"]:
+        print("El asiento no está disponible o no existe.")
+        return
+
+    DESTINOS[destino]["pasajeros"][rut] = {
+        "nombre": nombre,
+        "asiento": asiento,
+        "pasaporte": pasaporte
+    }
+    DESTINOS[destino]["asientos"].remove(asiento)
+    print("Asiento comprado con éxito.")
+    print(f"Pasaje comprado exitosamente para {destino}.")
+
+def ver_lista_pasajeros():
+    """Muestra la lista de pasajeros registrados para cada destino."""
+    print("\n--- Lista de pasajeros ---")
+    algun_pasajero_registrado = False
+    for destino, datos in DESTINOS.items():
+        if datos["pasajeros"]:
+            algun_pasajero_registrado = True
+            print(f"\nDestino: {destino}")
+            for rut, info in datos["pasajeros"].items():
+                print(f"  RUT: {rut}, Nombre: {info['nombre']}, Asiento: {info['asiento']}", end="")
+                if info['pasaporte']:
+                    print(f", Pasaporte: {info['pasaporte']}")
+                else:
+                    print("")
+        else:
+            print(f"\nDestino: {destino} - No hay pasajeros registrados.")
+    if not algun_pasajero_registrado:
+        print("No hay pasajeros registrados en ningún destino.")
