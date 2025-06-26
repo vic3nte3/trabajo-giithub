@@ -91,3 +91,50 @@ def ver_lista_pasajeros():
             print(f"\nDestino: {destino} - No hay pasajeros registrados.")
     if not algun_pasajero_registrado:
         print("No hay pasajeros registrados en ningún destino.")
+        
+        # --- Parte 3: Función principal ---
+
+def main():
+    """Función principal del programa."""
+    while True:
+        mostrar_menu()
+        opcion = input("Seleccione una opción: ").strip()
+
+        if opcion == "1":
+            print("\n1.- Ver asientos disponibles para:")
+            print("   a) Viña del Mar")
+            print("   b) Valparaíso")
+            print("   c) Mendoza")
+            sub_opcion = input("Seleccione el destino: ").strip().lower()
+            if sub_opcion == "a":
+                mostrar_asientos_disponibles("Viña del Mar")
+            elif sub_opcion == "b":
+                mostrar_asientos_disponibles("Valparaíso")
+            elif sub_opcion == "c":
+                mostrar_asientos_disponibles("Mendoza")
+            else:
+                print("Opción de destino inválida.")
+        elif opcion == "2":
+            print("\n2.- Comprar pasaje para:")
+            print("   a) Viña del Mar")
+            print("   b) Valparaíso")
+            print("   c) Mendoza (requiere pasaporte)")
+            sub_opcion = input("Seleccione el destino: ").strip().lower()
+            if sub_opcion == "a":
+                comprar_pasaje("Viña del Mar")
+            elif sub_opcion == "b":
+                comprar_pasaje("Valparaíso")
+            elif sub_opcion == "c":
+                comprar_pasaje("Mendoza", requiere_pasaporte=True)
+            else:
+                print("Opción de destino inválida.")
+        elif opcion == "3":
+            ver_lista_pasajeros()
+        elif opcion == "4":
+            print("Gracias por usar PasajeBus.")
+            break
+        else:
+            print("Opción inválida. Intente nuevamente.")
+
+if _name_ == "_main_":
+    main()
