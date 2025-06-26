@@ -17,3 +17,61 @@ def mostrar_menu():
 def mostrar_asientos_disponibles(destino, destinos):
     disponibles = destinos[destino]["asientos"]
     print(f"Asientos disponibles para {destino}: {disponibles if disponibles else 'Ninguno'}")
+
+from pasaje_bus_datos import DESTINOS, mostrar_asientos_disponibles
+
+def comprar_pasaje(destino, requiere_pasaporte=False):
+    mostrar_asientos_disponibles(destino, DESTINOS)
+    if not DESTINOS[destino]["asientos"]:
+        print("No hay asientos disponibles.")
+        return
+
+    rut = input("Ingrese su RUT: ").strip()
+    if rut in DESTINOS[destino]["pasajeros"]:
+        print("Ya tiene un pasaje registrado para este destino.")
+        return
+
+    nombre = input("Ingrese su nombre completo: ").strip()
+
+    if requiere_pasaporte:
+        tiene_pasaporte = input("¿Tiene pasaporte vigente? (s/n): ").lower()
+        if tiene_pasaporte != 's':
+            print("No puede comprar pasaje sin pasaporte.")
+            return
+        pasaporte = input("Ingrese su número de pasaporte: ").strip()
+    else:
+        pasaporte = None
+
+    try:
+        asiento = int(input("Ingrese el número de asiento que desea ocupar: "))
+    except ValueError:
+        print("Número de asiento inválido.")
+        return
+
+    if asiento not in DESTINOS[destino]["asientos"]:
+        print("El asiento no está disponible.")
+        return
+
+    DESTINOS[destino]["pasajeros"][rut] = {
+        "nombre": nombre,
+        "asiento": asiento,
+        "pasaporte": pasaporte
+    }
+    DESTINOS[destino]["asientos"].remove(asiento)
+    print("Pasaje comprado exitosamente.")
+
+def ver_asientos_disponibles():
+    for destino in DESTINOS:
+        mostrar_asientos_disponibles(destino, DESTINOS)
+
+def ver_lista_pasajeros():
+    for destino in DESTINOS:
+        print(f"\nPasajeros con destino a {destino}:")
+        if not DESTINOS[destino]["pasajeros"]:
+            print("  No hay pasajeros registrados.")
+        else:
+            for rut, datos in DESTINOS[destino]["pasajeros"].items():
+                info = f"  RUT: {rut}, Nombre: {datos['nombre']}, Asiento: {datos['asiento']}"
+                if destino == "Mendoza":
+                    info += f", Pasaporte: {datos['pasaporte']}"
+                print(info)
