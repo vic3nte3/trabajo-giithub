@@ -75,3 +75,30 @@ def ver_lista_pasajeros():
                 if destino == "Mendoza":
                     info += f", Pasaporte: {datos['pasaporte']}"
                 print(info)
+
+from pasaje_bus_datos import mostrar_menu
+from pasaje_bus_funciones import comprar_pasaje, ver_asientos_disponibles, ver_lista_pasajeros
+
+def main():
+    while True:
+        mostrar_menu()
+        opcion = input("Seleccione una opción: ").strip()
+
+        if opcion == "1":
+            comprar_pasaje("Viña del Mar")
+        elif opcion == "2":
+            comprar_pasaje("Valparaíso")
+        elif opcion == "3":
+            comprar_pasaje("Mendoza", requiere_pasaporte=True)
+        elif opcion == "4":
+            ver_asientos_disponibles()
+        elif opcion == "5":
+            ver_lista_pasajeros()
+        elif opcion == "6":
+            print("Gracias por usar PasajeBus.")
+            break
+        else:
+            print("Opción inválida. Intente nuevamente.")
+
+if _name_ == "_main_":
+    main()
